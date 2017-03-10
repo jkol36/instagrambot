@@ -1,6 +1,5 @@
 import {headers} from './config';
 import {parseProfile} from './parser'
-import { store } from './store'
 const agent = require('superagent-bluebird-promise');
 
 
