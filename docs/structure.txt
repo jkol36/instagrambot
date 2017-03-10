@@ -1,0 +1,29 @@
+Technologies being used:
+  State Management/Database
+    Firebase https://firebase.google.com
+    Redux https://github.com/reactjs/redux
+    MongoDB
+
+  MiddleWare
+    Redux Thunk https://github.com/gaearon/redux-thunk
+
+  Error management/debugging tools
+    Trace from Rising Stack https://trace.risingstack.com/?utm_source=risingsite&utm_medium=risingstack&utm_campaign=trace
+
+  Network/Requests
+    bluebird http://bluebirdjs.com/docs/getting-started.html
+    superagent-bluebird-promise https://github.com/KyleAMathews/superagent-bluebird-promise
+
+  development tools
+    nodemon
+
+  Unit Testing
+    Chai http://chaijs.com/
+    mocha https://mochajs.org/
+
+Structure
+  ...to be determined
+
+
+
+
