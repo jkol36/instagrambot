@@ -1,9 +1,6 @@
-import {headers, authHeaders} from './config';
+import {headers} from './config';
 import {parseProfile} from './parser'
-import { placeholderUpdated } from './actionCreators'
 import { store } from './store'
-const {getState, dispatch} = store
-// import proxies from './proxies'
 const agent = require('superagent-bluebird-promise');
 
 
