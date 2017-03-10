@@ -90,11 +90,9 @@ export const unfollowInstagramUser = (profileId) => {
           .post(url)
           .set(headers)
           .then(res => {
-            console.log(res)
             return profileId
           })
           .catch(err => {
-            console.log(err.status)
             return err
           })
 } 
