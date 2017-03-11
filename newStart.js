@@ -158,5 +158,5 @@ const fetchPlaceholders = () => {
   })
 }
 
-setTimeout((), startUnfollowChain, 60000)
+setTimeout(() => startUnfollowChain(), 60000)
 
