@@ -61,11 +61,6 @@ const startUnfollowChain = () => {
 
 }
 
-//starts to follow people based on a hashtag
-const startFollowChainHashtag = () => {
-
-}
-
 //starts to follow people who follow a user
 const startFollowChainUser = (instagramUsername) => {
   console.log(`starting follow chain for ${instagramUsername}`)
@@ -102,6 +97,7 @@ const startFollowChainUser = (instagramUsername) => {
           placeHolderUpdated(`next-${instagramUsername}-followers`, placeHolders[`next-${instagramUsername}-followers`])
           startFollowChainUser(instagramUsername)
         })
+        .catch(process.exit)
       }
     })
   }
@@ -133,6 +129,7 @@ const startFollowChainUser = (instagramUsername) => {
             placeHolderUpdated(`next-${instagramUsername}-followers`, placeHolders[`next-${instagramUsername}-followers`])
             startFollowChainUser(instagramUsername)
           })
+          .catch(process.exit)
 }
 
 const profileUnfollowed = (profileId) => {
@@ -161,14 +158,5 @@ const fetchPlaceholders = () => {
   })
 }
 
-startUnfollowChain()
-// authWithInstagram(process.env.INSTAGRAM_USERNAME, process.env.INSTAGRAM_PASSWORD)
-// .then(res => {
-//   console.log(res.headers['set-cookie'].join())
-// })
+setTimeout((), startUnfollowChain, 60000)
 
-
-// .catch(console.log)
-// startUnfollowChainInitial()
-// .then(console.log)
-// .catch(console.log)

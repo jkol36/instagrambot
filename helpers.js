@@ -162,4 +162,5 @@ export const getInstagramFollowing = (userId, count,placeholder) => {
       let pageInfo = res.body.follows.page_info
       return {pageInfo, followingArray}
     })
+    .catch(err => err)
 }
