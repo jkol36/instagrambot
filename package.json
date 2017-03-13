@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register -t 20000",
-    "start": "node index.js",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2",
-    "cleanup": "node cleanup.js"
+    "start": "node workers/index.js",
+    "flow": "flow; test $? -eq 0 -o $? -eq 2"
   },
   "author": "",
   "license": "ISC",

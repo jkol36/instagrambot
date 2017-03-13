@@ -1,5 +1,5 @@
-import {headers} from './config';
-import {parseProfile} from './parser'
+import {headers} from '../config';
+import {parseProfile} from '../parser'
 const agent = require('superagent-bluebird-promise');
 
 
@@ -20,6 +20,45 @@ export const getInitialPicsForHashtag = (hashtag) => {
     })
 }
 
+export const getCommentsForPicture = (ownerUsername, picCode) => {
+  return agent
+          .get(`https://www.instagram.com/p/${picCode}/?taken-by=${ownerUsername}&__a=1`)
+          .set(headers)
+          .then(res => {
+            let commentArray = res.body.media.comments.nodes
+            let pageInfo = res.body.media.comments.page_info
+            return {commentArray, pageInfo}
+          })
+          .catch(err => err)
+}
+
+export const getNextCommentsForPicture = (picCode, endCursor) => {
+  var dataString =`q=ig_shortcode(${picCode})+%7B%0A++comments.before(%0A++++++++++++${endCursor}%2C%0A++++++++++++20%0A++++++++++)+%7B%0A++++count%2C%0A++++nodes+%7B%0A++++++id%2C%0A++++++created_at%2C%0A++++++text%2C%0A++++++user+%7B%0A++++++++id%2C%0A++++++++profile_pic_url%2C%0A++++++++username%0A++++++%7D%0A++++%7D%2C%0A++++page_info%0A++%7D%0A%7D%0A&ref=media%3A%3Ashow&query_id=17867562154006893`;
+  return agent
+  .post('https://www.instagram.com/query/')
+  .set(headers)
+  .send(dataString)
+  .then(res => {
+    let commentArray = res.body.comments.nodes
+    let pageInfo = res.body.comments.page_info
+    return {commentArray, pageInfo}
+  })
+  .catch(err => err)
+}
+
+export const getNextPicsForUser = (userId, placeholder, count) => {
+  var dataString =`q=ig_user(${userId})+%7B+media.after(${placeholder}%2C+${count})+%7B%0A++count%2C%0A++nodes+%7B%0A++++__typename%2C%0A++++caption%2C%0A++++code%2C%0A++++comments+%7B%0A++++++count%0A++++%7D%2C%0A++++comments_disabled%2C%0A++++date%2C%0A++++dimensions+%7B%0A++++++height%2C%0A++++++width%0A++++%7D%2C%0A++++display_src%2C%0A++++id%2C%0A++++is_video%2C%0A++++likes+%7B%0A++++++count%0A++++%7D%2C%0A++++owner+%7B%0A++++++id%0A++++%7D%2C%0A++++thumbnail_src%2C%0A++++video_views%0A++%7D%2C%0A++page_info%0A%7D%0A+%7D&ref=users%3A%3Ashow&query_id=17849115430193904`;
+  return agent
+  .post('https://www.instagram.com/query/')
+  .set(headers)
+  .send(dataString)
+  .then(res => {
+    let picArray = res.body.media.nodes.map(node => node.code)
+    let pageInfo = res.body.media.page_info
+    return {picArray, pageInfo}
+  })
+  .catch(err => err)
+}
 //gets next page of pics for a hashtag, use after getInitialPicsAndPageInfoForHashtag
 export const getNextPicsForHashtag = (hashtag, placeholder, count) => {
   var dataString = `q=ig_hashtag(${hashtag.payload})+%7B+media.after(${placeholder}%2C+${count})+%7B%0A++count%2C%0A++nodes+%7B%0A++++caption%2C%0A++++code%2C%0A++++comments+%7B%0A++++++count%0A++++%7D%2C%0A++++comments_disabled%2C%0A++++date%2C%0A++++dimensions+%7B%0A++++++height%2C%0A++++++width%0A++++%7D%2C%0A++++display_src%2C%0A++++id%2C%0A++++is_video%2C%0A++++likes+%7B%0A++++++count%0A++++%7D%2C%0A++++owner+%7B%0A++++++id%0A++++%7D%2C%0A++++thumbnail_src%2C%0A++++video_views%0A++%7D%2C%0A++page_info%0A%7D%0A+%7D&ref=tags%3A%3Ashow&query_id=`;
@@ -164,3 +203,16 @@ export const getInstagramFollowing = (userId, count,placeholder) => {
     })
     .catch(err => err)
 }
+
+//likes an instagram picture
+export const likePicture = (picId) => {
+  let url = `https://www.instagram.com/web/likes/${picId}/like/`
+  return agent
+  .post(url)
+  .set(headers)
+  .then(res => picId)
+  .catch(err => err)
+}
+
+
+

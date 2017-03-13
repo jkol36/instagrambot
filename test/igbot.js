@@ -5,8 +5,11 @@ import {
   findUserFromInstagramPic,
   getInitialPicsForHashtag,
   getNextPicsForHashtag,
+  getNextPicsForUser,
   getInstagramFollowers,
-  getInstagramFollowing
+  getInstagramFollowing,
+  getCommentsForPicture,
+  getNextCommentsForPicture
 } from '../helpers'
 
 
@@ -64,6 +67,41 @@ describe('ig bot', () => {
       expect(followingArray).to.be.an('array')
       expect(pageInfo).to.be.an('object')
       expect(pageInfo).to.have.property('end_cursor')
+      done()
+    })
+  })
+  it('should get next picture ids for a user', done => {
+    let garyVeeUserId = '1697296'
+    let endCursor = '1463085765852178416'
+    let count = 12
+    getNextPicsForUser(garyVeeUserId, endCursor, count)
+    .then(res => {
+      const {pageInfo:{end_cursor}, picArray} = res
+      expect(picArray).to.be.an('array')
+      expect(end_cursor).to.not.be.undefined
+      done()
+    })
+  })
+  it('should get initial comments for a picture', done => {
+    let pictureId = 'BRMf6h6DL6p'
+    let poster = 'garyvee'
+    getCommentsForPicture(poster, pictureId)
+    .then(commentsAndPageInfo => {
+      const {pageInfo:{end_cursor}, commentArray} = commentsAndPageInfo
+      console.log(end_cursor)
+      expect(commentArray).to.be.an('array')
+      expect(end_cursor).to.not.be.undefined
+      done()
+    })
+  })
+  it('should get next comments for picture', done => {
+    let pictureId = 'BRMf6h6DL6p' 
+    let endCursor = 'AQCzRmeySdb85epIxJr5Rz5p3iLRVmI-4oo91EpUN15cPrEjr3MnjRcgwVz8yDXq72-vHq_Fgu10ceKL0j89dotFbLtK2bo6wUdw5ZMCbVhioXFxkbDv3anF4f6HxFTWHgE'
+    getNextCommentsForPicture(pictureId, endCursor)
+    .then(res => {
+      const {commentArray, pageInfo} = res
+      expect(commentArray).to.be.an('array')
+      expect(pageInfo).to.be.an('object')
       done()
     })
   })

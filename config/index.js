@@ -24,14 +24,21 @@ export const headers = {
 };
 
 
+export const influencers = ['garyvee', 'tonyrobbins', 'codergirl_']
 
-
+//this is the global instagram account that's going to be benefitting from the automation
 export const currentInstagramAccount = process.env.INSTAGRAM_USERNAME
 export const firebaseRef = firebase.database().ref(`instagrambot/${currentInstagramAccount}`)
-export const placeholderRef = firebase.database().ref(`instagrambot/${currentInstagramAccount}/placeholders`)
+//contains a mapping of placeholders for followers, following, comments, and pictures
+export const placeHolderRef = firebase.database().ref(`instagrambot/${currentInstagramAccount}/placeholders`)
+//contains a mapping of user ids unfollowed by the global instagram user
 export const unfollowedUsersRef = firebase.database().ref(`instagrambot/${currentInstagramAccount}/unfollowedUsers`)
+//contains a mapping of user ids followed by the global instagram user
 export const followedUsersRef = firebase.database().ref(`instagrambot/${currentInstagramAccount}/followedUsers`)
-export const pictureIdsLiked = firebase.database().ref(`instagrambot/${currentInstagramAccount}/pictureIdsLiked`)
+//contains a mapping of pictureIds liked by the global instagram user
+export const likedPicturesRef = firebase.database().ref(`instagrambot/${currentInstagramAccount}/pictureIdsLiked`)
+export const followQueueRef = firebase.database().ref(`instagrambot/${currentInstagramAccount}/followQueue`)
+export const likeQueueRef = firebase.database().ref(`instagrambot/${currentInstagramAccount}/likeQueue`)
 export const defaultPicsToFetch = 12
 export const defaultFollowersToFetch = 12
 global.Promise = require('bluebird');
