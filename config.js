@@ -34,4 +34,5 @@ export const followedUsersRef = firebase.database().ref(`instagrambot/${currentI
 export const pictureIdsLiked = firebase.database().ref(`instagrambot/${currentInstagramAccount}/pictureIdsLiked`)
 export const defaultPicsToFetch = 12
 export const defaultFollowersToFetch = 12
+export const TIMEOUT_VARIABLE = 60000
 global.Promise = require('bluebird');
