@@ -2,7 +2,8 @@ import {
  headers,
  placeholderRef,
  unfollowedUsersRef,
- followedUsersRef
+ followedUsersRef,
+ TIMEOUT_VARIABLE
 } from './config'
 import { 
   authWithInstagram,
@@ -45,7 +46,7 @@ const startUnfollowChain = () => {
               console.log(res)
               if(res.status !== undefined) {
                 console.log('rate limited')
-                return process.exit()
+                return Promise.delay(TIMEOUT_VARIABLE).then(process.exit)
               }
               else {
                 return profileUnfollowed(res).delay(2000)
@@ -66,12 +67,13 @@ const startFollowChainUser = (instagramUsername) => {
   console.log(`starting follow chain for ${instagramUsername}`)
   if(placeHolders[`next-${instagramUsername}-followers`] === undefined){
     return fetchPlaceholders().then(res => {
-      console.log('placeholder for username was undefined')
+      console.log('placeholder for username was undefined', res)
       if(!res) {
-        getInstagramProfile(instagramUsername)
+        console.log('running')
+        return getInstagramProfile(instagramUsername)
         .then(instagramProfile => {
           const {user:{id}} = instagramProfile
-          return getInstagramFollowers(id, 12)
+          return getInstagramFollowers(instagramUsername, id, 12)
         })
         .then(followersAndPageInfo => {
           const {followerArray, pageInfo:{end_cursor}} = followersAndPageInfo
@@ -85,7 +87,7 @@ const startFollowChainUser = (instagramUsername) => {
             .then(res => {
               if(res.status !== undefined) {
                 console.log('rate limited')
-                return process.exit()
+                return Promise.delay(TIMEOUT_VARIABLE).then(process.exit)
               }
               else {
                 return profileFollowed(res).delay(2000)
@@ -97,14 +99,23 @@ const startFollowChainUser = (instagramUsername) => {
           placeHolderUpdated(`next-${instagramUsername}-followers`, placeHolders[`next-${instagramUsername}-followers`])
           startFollowChainUser(instagramUsername)
         })
-        .catch(process.exit)
+        .catch(err => {
+          console.log
+          if(err === 'rate_limited') {
+            setTimeout(() => process.exit(), 600000)
+          }
+        })
+      }
+      else {
+        console.log('yooo')
       }
     })
   }
   return getInstagramProfile(instagramUsername)
           .then(instagramProfile => {
+            console.log('got instagram profile', instagramProfile)
             const { user:{id}} = instagramProfile
-            return getInstagramFollowers(id, 12, placeHolders[`next-${instagramUsername}-followers`])
+            return getInstagramFollowers(instagramUsername, id, 12, placeHolders[`next-${instagramUsername}-followers`])
           })
           .then(followersAndPageInfo => {
             const {followerArray, pageInfo} = followersAndPageInfo
@@ -117,7 +128,7 @@ const startFollowChainUser = (instagramUsername) => {
               .then(res => {
                 if(res.status !== undefined) {
                   console.log('rate limited')
-                  return process.exit()
+                  return Promise.delay(TIMEOUT_VARIABLE).then(process.exit)
                 }
                 else {
                   return profileFollowed(res).delay(4000)
@@ -129,7 +140,7 @@ const startFollowChainUser = (instagramUsername) => {
             placeHolderUpdated(`next-${instagramUsername}-followers`, placeHolders[`next-${instagramUsername}-followers`])
             startFollowChainUser(instagramUsername)
           })
-          .catch(process.exit)
+          .catch(console.log)
 }
 
 const profileUnfollowed = (profileId) => {
@@ -151,12 +162,15 @@ const placeHolderUpdated = (key, val) => {
 
 const fetchPlaceholders = () => {
   return new Promise(resolve => {
-    placeholderRef.child(`next-${process.env.INSTAGRAM_USERNAME}-following`).once('value', s => {
-      placeHolders[`next-${process.env.INSTAGRAM_USERNAME}-following`] = s.val()
+    placeholderRef.once('value', s => {
+      let plceholdersKeys = Object.keys(s.val())
+      plceholdersKeys.forEach(k => {
+        placeHolders[k] = s.val()[k]
+      })
       resolve()
     })
   })
 }
 
-setTimeout(() => startUnfollowChain(), 60000)
-
+fetchPlaceholders()
+.then(() => startFollowChainUser('garyvee'))
