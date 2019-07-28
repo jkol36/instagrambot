@@ -20,7 +20,6 @@ export const parseProfile = data => {
       returnData.user = json.entry_data.ProfilePage[0].graphql.user
     }
     catch(err) {
-      console.log(err)
       reject({message:'no json to parse', originalError:err, 'retryPayload': username, code: 1})
     }
     resolve(returnData)

@@ -13,9 +13,10 @@ export const getInitialPicsForHashtag = (hashtag) => {
   .get(url)
   .set(headers)
   .then(res => {
+    console.log(Object.keys(res.body.graphql.hashtag.edge_hashtag_to_media.edges))
     //just return the posts for easy mapping, save the page data in redux for this hashtag
-      let picArray = res.body.tag.media.nodes.map(node => node.code)
-      let pageInfo = res.body.tag.media.page_info
+      let picArray = res.body.graphql.hashtag.edge_hashtag_to_media.edges
+      let pageInfo = res.body.graphql.hashtag.edge_hashtag_to_media.page_info
       return {picArray, pageInfo}
     })
 }

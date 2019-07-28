@@ -14,18 +14,14 @@ import {
 describe('ig bot', () => { 
   it('should get a instagram profile given a username', done => {
     getInstagramProfile('jkol36')
-    .then(instagramProfile => {
-      console.log(instagramProfile)
-      const {
-        user:{followed_by, full_name, username}
-      } = instagramProfile
-      expect(followed_by).to.not.be.undefined
-      expect(full_name).to.not.be.undefined
-      expect(username).to.not.be.undefined
+    .then(res => {
+      let {user, email} = res
+      expect(user).to.be.an.object
+      expect(email).to.eq('jonkolmanllc@gmail.com')
       done()
     })
   })
-  it('should get initial pics and page info for hashtag', done => {
+  it.only('should get initial pics and page info for hashtag', done => {
     getInitialPicsForHashtag('startups')
     .then(picsAndPageInfo => {
       console.log(picsAndPageInfo)
