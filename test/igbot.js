@@ -15,6 +15,7 @@ describe('ig bot', () => {
   it('should get a instagram profile given a username', done => {
     getInstagramProfile('jkol36')
     .then(instagramProfile => {
+      console.log(instagramProfile)
       const {
         user:{followed_by, full_name, username}
       } = instagramProfile

@@ -9,14 +9,15 @@ export const parseProfile = data => {
     json = JSON.parse(json)
     let returnData = {}
     try {
-      let bio = json.entry_data.ProfilePage[0].user.biography
+      let bio = json.entry_data.ProfilePage[0].graphql.user.biography
+      console.log(bio)
       if(bio) {
         let email = extractEmails(bio)
         if(email) {
           returnData.email = email[0]
         }
       }
-      returnData.user = json.entry_data.ProfilePage[0].user
+      returnData.user = json.entry_data.ProfilePage[0].graphql.user
     }
     catch(err) {
       console.log(err)
