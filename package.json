@@ -27,7 +27,7 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "rx": "^4.1.0",
-    "superagent": "^1.8.4",
+    "superagent": "^5.1.0",
     "superagent-bluebird-promise": "^4.1.0",
     "superagent-proxy": "^1.0.2",
     "taim": "^1.0.2"
@@ -40,6 +40,6 @@
     "flow-bin": "^0.36.0",
     "mocha": "^2.4.5",
     "nodemon": "^1.11.0",
-    "superagent": "^1.7.2"
+    "superagent": "^5.1.0"
   }
 }
